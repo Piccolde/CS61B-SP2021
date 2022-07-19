@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author TODO: Richard
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -113,6 +113,69 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        /** there are basically 2 main stages into solving the puzzle;
+         * for stage 1, we would have to make sure all non-null tiles are
+         * on the right row level after each move and yet to be merged;
+         * Stage 2: after all elements are in their position, look for
+         * the adjacent with the same numbers and merge them with the move
+         * function;
+         * Lastly, set the board's perspective back to North from the previously
+         * assigned side at the very beginning of this block;
+         */
+        board.setViewingPerspective(side); //board reoriented for move in all directions/
+        /** stage 1: implementing a new variable position to set the conditions in order to move
+         * the all pieces to the correct spots in rows;
+         */
+        for(int c = 0; c < size(); c++) { //add columns stay fixed/
+            for(int r = size() - 1; r >= 0 ; r--) {//Note that for the row iteration that has to start from the top, otherwise bugs occur/
+                Tile t = board.tile(c, r);
+                if(t != null) {
+                    int nexPos = 3;
+                   while(nexPos >= r) {
+                        if(board.tile(c, nexPos) == null) {
+                            break;
+                        }
+                        nexPos--;
+                   }
+                   if(nexPos >= r) {
+                       board.move(c, nexPos, t);
+                       changed =  true;//setting the changeed to be true for each move/
+                   }
+                }
+            }
+            /** after the first stage, we are now for sure that all non-null
+             * pieces have filled the slot after another piece or moved to
+             * the very top(row 3); then we shall see all same numbers merge
+             * into its double. Note that there is only 2 numbers for the maxim
+             * to be merged each move;
+             */
+            for(int r = 3; r > 0; r--) {//shifting from the top to the bottom/
+                Tile currTile = board.tile(c, r);
+                int nextRow = r - 1;
+                if(nextRow < 0) {//setting the boundary/
+                    break;
+                }
+                Tile tBelow = board.tile(c, nextRow);
+                if(tBelow == null || currTile == null) {//both pieces must not be null before proceed/
+                    break;
+                }
+                if(tBelow.value() == currTile.value()){
+                    board.move(c, r, tBelow);
+                    score += currTile.value()  * 2;//update the score with the tile value multiplied by 2, otherwise bugs occur/
+                    for(int x = nextRow - 1; x >= 0; x--) {//cases that there are more than 2 numbers in the adjacent/
+                        Tile tBB = board.tile(c, x);
+                        if(tBB == null) {
+                            break;
+                        } else
+                            board.move(c, nextRow, tBB);
+                                if(x == 0) //for special cases where an adjacent of 4 occurs/
+                                    score *= 2;
+                    }
+                    changed = true;//setting the changed to be true for each move/
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);//tile the board back to the side North after all operations/
 
         checkGameOver();
         if (changed) {
@@ -138,6 +201,15 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        /** iterating over all tiles using the nested
+         * for loops to pluck out any nulls
+         */
+        for(int i = 0; i < b.size(); i++) {
+            for(int j = 0; j < b.size(); j++){
+                if(b.tile(i, j) == null)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -148,6 +220,17 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        /** applying the same method to search for the
+         * Max_Piece which is 2048
+         */
+        for(int i = 0; i < b.size(); i++) {
+            for(int j = 0; j < b.size(); j++){
+                if (b.tile(i, j) == null) /** skip any nulls to avoid disruption errors */
+                    continue;
+                if(b.tile(i, j).value() == MAX_PIECE) /** using the variables to set the conditions instead of the number */
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -159,6 +242,36 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        /** step 1: make sure there is no null values on the board:
+         * we can actually use the predefined "empty space exists" method
+         * to make our code more concise;
+         */
+        if(emptySpaceExists(b))
+            return true;
+        /** step 2: since there is no null values and we have to go over
+         * any adjacent values that are the same numbers:
+         * we would need to use the direction from the SIDE class to implement
+         * a vertical and a horizontal coordinate with board reoriented North as
+         * default so far;
+         */
+        int[] dx = {0, -1, 0, 1}; /** vertical checkup */
+        int[] dy = {-1, 0, 1, 0}; /** horizontal checkup */
+
+        for(int col = 0; col < b.size(); col++) {
+            for(int row = 0; row < b.size(); row++) {
+                int currTileValue = b.tile(col, row).value();
+                for(int move = 0; move < 4; move++) {
+                    int newTileCol = col + dx[move];
+                    int newTileRow = row + dy[move];
+                    //the move would have to be in the boundary/
+                    if(newTileCol>0 && newTileCol<b.size() && newTileRow>0 && newTileRow < b.size()) {
+                        Tile newTile = b.tile(newTileCol, newTileRow);
+                        if(newTile.value() == currTileValue)
+                            return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
