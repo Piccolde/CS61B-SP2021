@@ -170,20 +170,4 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
         return true;
     }
-
-    public static void main(String[] args) {
-        /* Creates a list of one integer, namely 10 */
-        LinkedListDeque<String> L = new LinkedListDeque();
-        L.addFirst("yo whats up man?");
-        L.addFirst("Nothing much bro, you?");
-        L.addFirst("same here bro. yo wanna grab some beer to drink?");
-        L.addFirst("sounds great, let's do this!");
-        L.addFirst("you got a preference?");
-        System.out.println(L.size());
-        System.out.println(L.getLast());
-        System.out.println(L.getFirst());
-        L.printDeque();
-        System.out.println(L.get(3));
-        System.out.println(L.getRecursive(3));
-    }
 }
