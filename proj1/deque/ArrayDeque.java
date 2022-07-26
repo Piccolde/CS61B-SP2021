@@ -1,10 +1,7 @@
 package deque;
 
-import org.apache.commons.collections.iterators.ArrayIterator;
 
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class ArrayDeque<T> implements Deque<T>{
     private T[] items;
@@ -74,11 +71,6 @@ public class ArrayDeque<T> implements Deque<T>{
         if (nextLast > items.length - 1) {
             nextLast = 0;
         }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return Deque.super.isEmpty();
     }
 
     @Override
@@ -166,6 +158,7 @@ public class ArrayDeque<T> implements Deque<T>{
         }
     }
 
+    @Override
     public boolean equals(Object o) {
         if(this == o)
             return true;
