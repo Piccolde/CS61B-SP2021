@@ -46,16 +46,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         size += 1;
     }
 
-    /** Returns the first item in the list. */
-    public T getFirst() {
-        return sentinel.next.item;
-    }
-
-    /** returns last item in the list */
-    public T getLast() {
-        return sentinel.prev.item;
-    }
-
 
     /** Returns the size of the list. */
     @Override
@@ -110,21 +100,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             index -= 1;
         }
         return p.item;
-    }
-
-    public T getRecursive(int index) {
-        if(index > size - 1) {
-            return null;
-        }
-        return getRecursive(sentinel.next, index);
-    }
-
-    public T getRecursive(Node start, int index) {
-        if(index == 0) {
-            return start.item;
-        } else {
-            return getRecursive(start.next, index - 1);
-        }
     }
 
     @Override
