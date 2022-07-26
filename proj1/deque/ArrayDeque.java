@@ -179,6 +179,7 @@ public class ArrayDeque<T> implements Deque<T>{
     }
 
     public static void main(String[] args) {
-
+        ArrayDeque<String> L = new ArrayDeque<>();
+        L.addFirst("Hello World");
     }
 }

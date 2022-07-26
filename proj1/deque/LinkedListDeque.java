@@ -170,8 +170,4 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
         return true;
     }
-
-    public static void main(String[] args) {
-
-    }
 }
