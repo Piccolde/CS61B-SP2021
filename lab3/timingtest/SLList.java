@@ -1,5 +1,7 @@
 package timingtest;
 
+import java.util.LinkedList;
+
 /** An SLList is a list of integers, which hides the terrible truth
  * of the nakedness within. */
 public class SLList<Item> {
@@ -16,6 +18,7 @@ public class SLList<Item> {
 	/* The first item (if it exists) is at sentinel.next. */
 	private IntNode sentinel;
 	private int size;
+	private IntNode lastNode;
 
 	/** Creates an empty timingtest.SLList. */
 	public SLList() {
@@ -72,10 +75,16 @@ public class SLList<Item> {
 		return size;
 	}
 
+	public void reverse() {
+		
+	}
+
 	public static void main(String[] args) {
 		/* Creates a list of one integer, namely 10 */
 		SLList L = new SLList();
-		L.addLast(20);
-		System.out.println(L.size());
+		for(int i = 0; i <= 1000; i++) {
+			L.addLast(i);
+		}
+		System.out.println(L.getLast());
 	}
 }

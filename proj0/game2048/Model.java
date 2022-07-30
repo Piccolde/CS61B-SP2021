@@ -1,5 +1,6 @@
 package game2048;
 
+import java.io.Serializable;
 import java.util.Formatter;
 import java.util.Observable;
 
@@ -7,7 +8,7 @@ import java.util.Observable;
 /** The state of a game of 2048.
  *  @author TODO: Richard
  */
-public class Model extends Observable {
+public class Model extends Observable implements Serializable {
     /** Current contents of the board. */
     private Board board;
     /** Current score. */
